@@ -56,12 +56,14 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
+parse_git_branch() {
+  git rev-parse --is-inside-work-tree &>/dev/null || return
+  git_branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
+  git_dirty=$(test -n "$(git status --porcelain)" && echo "*" || echo "")
+  echo " ($git_branch$git_dirty)"
+}
+
+export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[0m\]:\[\033[01;34m\]\w\[\033[0m\]\[\033[36m\]$(parse_git_branch)\[\033[0m\]\$ '
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
@@ -221,6 +223,7 @@ alias please='sudo $(fc -ln -1)'
 alias update='sudo apt update && sudo apt upgrade -y'
 alias k9='kill -9'
 alias yours='echo youyrs'
+alias rand='cd ~/Coding/random/'
 
 alias gametime='
 cd ~/GameMakerStudio2/vm/MKHGAME
