@@ -109,6 +109,10 @@ fi
 
 export TERM=xterm-256color
 
+bind 'set show-all-if-ambiguous on'
+bind 'TAB:menu-complete'
+bind 'set menu-complete-display-prefix on'
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -135,13 +139,13 @@ dc() {
   cd "$@"
 }
 
-# v() {
-#   vim "$@"
-# }
+v() {
+  nvim "$@"
+}
 
-# sv() {
-#   sudo vim "$@"
-# }
+sv() {
+  sudo nvim "$@"
+}
 
 mkcd() {
     mkdir -p "$1" && cd "$1"
@@ -209,11 +213,6 @@ math() {
     echo "$expr" | bc -l
 }
 
-# vim() {
-#   tmux rename-window vim 2>/dev/null
-#   command vim "$@"
-# }
-
 exec {__bash_trace_fd}>/dev/null
 
 export BASH_XTRACEFD=$__bash_trace_fd
@@ -225,8 +224,8 @@ shopt -s autocd
 
 alias neofetch='neofetch --image_backend kitty --source /home/user/Pictures/merusuccubi.png'
 
-export VISUAL=vim
-export EDITOR=vim
+export VISUAL=nvim
+export EDITOR=nvim
 
 alias time='date +%T'
 alias p='cd ~/Coding/'
@@ -243,19 +242,10 @@ alias fortune='fortune | cowsay -f duck'
 alias sl='ls'
 
 alias lang='python3 ~/Coding/scripts/lang.py'
-alias gametime='
-cd ~/GameMakerStudio2/vm/MKHGAME
-
-linuxdeploy \
-  --appdir AppDir \
-  --desktop-file AppDir/usr/share/applications/MKHGAME.desktop \
-  --icon-file AppDir/usr/share/icons/hicolor/64x64/apps/MKHGAME.png \
-  --output appimage
-'
 
 alias h='history'
 alias hg='history | grep'
-alias e='vim "$(
+alias e='nvim "$(
   find . \
     -type d \( \
       -name .git -o \
@@ -318,6 +308,35 @@ alias e='vim "$(
     2>/dev/null | fzf
 )"'
 
+alias w='cd "$(
+  find . \
+    -type d \( \
+      -name .git -o \
+      -name node_modules -o \
+      -name target -o \
+      -name venv -o \
+      -name .venv -o \
+      -name __pycache__ -o \
+      -name .cache -o \
+      -name .idea -o \
+      -name .vscode -o \
+      -name dist -o \
+      -name .local -o \
+      -name .cargo -o \
+      -path "*/.config/Code" -o \
+      -name .vim -o \
+      -name snap -o \
+      -name .rustup -o \
+      -name build -o \
+      -name out -o \
+      -name .next -o \
+      -name .svelte-kit -o \
+      -name .tox \
+    \) -prune -false -o \
+    -type d \
+    2>/dev/null | fzf
+)"'
+
 alias bat1='powerprofilesctl set performance'
 alias bat2='powerprofilesctl set balanced'
 alias bat3='powerprofilesctl set power-saver'
@@ -330,18 +349,21 @@ alias gl='git log'
 alias gp='git pull'
 
 alias notes='cd ~/notes-and-guides'
-alias vtodo='vim +$ ~/todo.md'
+alias vtodo='nvim +$ ~/todo.md'
 alias todo='cat ~/todo.md'
 alias rand='cd ~/Coding/random/'
 alias scripts='cd ~/Coding/scripts/'
 alias weather='curl wttr.in'
+alias vim='nvim'
 
 alias pymal='source ~/Coding/envs/malectrica/bin/activate'
 alias pywork='source ~/Coding/envs/work/bin/activate'
+alias pyrand='source ~/Coding/envs/random/bin/activate'
 alias leave='deactivate'
 
 alias battery='/home/user/Coding/scripts/battery.sh'
 
+alias d='/home/user/Coding/scripts/dormat.sh'
 alias f='/home/user/Coding/scripts/format.sh'
 # tmux \; \
 #   split-window -h -l 80 -- 'btop' \; \
@@ -387,4 +409,4 @@ alias github='/home/user/Coding/scripts/github.sh' # remember to change the bran
 # Created by `pipx` on 2025-07-13 13:45:00
 export PATH="$PATH:/home/user/.local/bin"
 
-alias vim='/usr/bin/vim'
+# alias vim='/usr/bin/vim'
